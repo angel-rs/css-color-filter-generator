@@ -1,10 +1,40 @@
+function rgbToHex(r, g, b) {
+  function componentToHex(c) {
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+  }
+
+  return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
+function hexToRgb(hex) {
+  // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+  const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+  hex = hex.replace(shorthandRegex, (m, r, g, b) => {
+    return r + r + g + g + b + b;
+  });
+
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? [
+      parseInt(result[1], 16),
+      parseInt(result[2], 16),
+      parseInt(result[3], 16),
+    ]
+    : null;
+}
+
 class Color {
   constructor(r, g, b) {
     this.set(r, g, b);
   }
 
-  toString() {
+  toRgb() {
     return `rgb(${Math.round(this.r)}, ${Math.round(this.g)}, ${Math.round(this.b)})`;
+  }
+
+  toHex() {
+    return rgbToHex(Math.round(this.r), Math.round(this.g), Math.round(this.b));
   }
 
   set(r, g, b) {
@@ -161,6 +191,7 @@ class Solver {
       values: result.values,
       loss: result.loss,
       filter: this.css(result.values),
+      filterRaw: this.raw(result.values),
     };
   }
 
@@ -267,57 +298,106 @@ class Solver {
     );
   }
 
+  raw(filters) {
+    function fmt(idx, multiplier = 1) {
+      return Math.round(filters[idx] * multiplier);
+    }
+    return `brightness(0) saturate(100%) invert(${fmt(0)}%) sepia(${fmt(1)}%) saturate(${fmt(2)}%) hue-rotate(${fmt(3, 3.6)}deg) brightness(${fmt(4)}%) contrast(${fmt(5)}%)`;
+  }
+
   css(filters) {
     function fmt(idx, multiplier = 1) {
       return Math.round(filters[idx] * multiplier);
     }
-    return `filter: invert(${fmt(0)}%) sepia(${fmt(1)}%) saturate(${fmt(2)}%) hue-rotate(${fmt(3, 3.6)}deg) brightness(${fmt(4)}%) contrast(${fmt(5)}%);`;
+    return `filter: brightness(0) saturate(100%) invert(${fmt(0)}%) sepia(${fmt(1)}%) saturate(${fmt(2)}%) hue-rotate(${fmt(3, 3.6)}deg) brightness(${fmt(4)}%) contrast(${fmt(5)}%);`;
   }
 }
 
-function hexToRgb(hex) {
-  // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
-  const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-  hex = hex.replace(shorthandRegex, (m, r, g, b) => {
-    return r + r + g + g + b + b;
-  });
+function compute() {
+  const input = document.getElementById('color-input').value;
+  const rgb = hexToRgb(input);
 
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result
-    ? [
-      parseInt(result[1], 16),
-      parseInt(result[2], 16),
-      parseInt(result[3], 16),
-    ]
-    : null;
+  if (rgb.length !== 3) {
+    alert('Invalid format!');
+    return;
+  }
+
+  const color = new Color(rgb[0], rgb[1], rgb[2]);
+  const solver =  new Solver(color);
+  const result = solver.solve();
+  let lossMsg = '';
+  const res = {
+    color,
+    solver,
+    result,
+    lossMsg,
+  };
+
+  if (res.result.loss < 1) {
+    res.lossMsg = 'This is a perfect result.';
+  } else if (res.result.loss < 5) {
+    res.lossMsg = 'The is close enough.';
+  } else if (res.result.loss < 15) {
+    res.lossMsg = 'The color is somewhat off. Consider running it again.';
+  } else {
+    res.lossMsg = 'The color is extremely off. Run it again!';
+  }
+
+  const filterPixel = document.getElementById('filterPixel');
+  const filterPixelText = document.getElementById('filterPixelText');
+  const lossDetail = document.getElementById('lossDetail');
+  const realPixel = document.getElementById('realPixel');
+  const realPixelTextRGB = document.getElementById('realPixelTextRGB');
+  const realPixelTextHEX = document.getElementById('realPixelTextHEX');
+  const rgbColor = res.color.toRgb();
+  const hexColor = res.color.toHex();
+
+  realPixel.style.backgroundColor = rgbColor;
+  realPixelTextRGB.innerText = rgbColor;
+  realPixelTextRGB.setAttribute('data-clipboard-text', rgbColor);
+  realPixelTextHEX.innerText = hexColor;
+  realPixelTextHEX.setAttribute('data-clipboard-text', hexColor);
+
+  filterPixel.style.filter = String(res.result.filterRaw);
+  filterPixel.style.webkitFilter = String(res.result.filterRaw);
+
+  filterPixelText.innerText = res.result.filter;
+  filterPixelText.setAttribute('data-clipboard-text', res.result.filter);
+
+  lossDetail.innerHTML = `Loss: ${res.result.loss.toFixed(1)}. <b>${res.lossMsg}</b>`;
 }
 
-$(document).ready(() => {
-  $('button.execute').click(() => {
-    const rgb = hexToRgb($('input.target').val());
-    if (rgb.length !== 3) {
-      alert('Invalid format!');
-      return;
-    }
+function validateColor(color) {
+  const submitButton = document.getElementById('action-button');
+  const HEXColorRegExp = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
+  const isValid = HEXColorRegExp.test(color);
 
-    const color = new Color(rgb[0], rgb[1], rgb[2]);
-    const solver = new Solver(color);
-    const result = solver.solve();
+  if (isValid) {
+    submitButton.classList.remove('disabled');
+  } else if (!submitButton.classList.contains('disabled')) {
+    submitButton.classList.add('disabled');
+  }
+}
 
-    let lossMsg;
-    if (result.loss < 1) {
-      lossMsg = 'This is a perfect result.';
-    } else if (result.loss < 5) {
-      lossMsg = 'The is close enough.';
-    } else if (result.loss < 15) {
-      lossMsg = 'The color is somewhat off. Consider running it again.';
-    } else {
-      lossMsg = 'The color is extremely off. Run it again!';
-    }
+function onStart() {
+  const copyableElements = document.querySelectorAll('.copyable');
+  const copyEl = document.querySelectorAll('.pos');
 
-    $('.realPixel').css('background-color', color.toString());
-    $('.filterPixel').attr('style', result.filter);
-    $('.filterDetail').text(result.filter);
-    $('.lossDetail').html(`Loss: ${result.loss.toFixed(1)}. <b>${lossMsg}</b>`);
+  new ClipboardJS('code');
+
+  copyableElements.forEach((el, index) => {
+    el.addEventListener('click', () => {
+      copyEl[index].classList.add('copied');
+
+      setTimeout(() => {
+        copyEl[index].classList.remove('copied');
+      }, 1500);
+    });
   });
-});
+
+  document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById('color-input').removeAttribute('disabled');
+  });
+}
+
+onStart();
