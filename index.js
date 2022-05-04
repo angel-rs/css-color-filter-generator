@@ -17,10 +17,10 @@ function hexToRgb(hex) {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
     ? [
-      parseInt(result[1], 16),
-      parseInt(result[2], 16),
-      parseInt(result[3], 16),
-    ]
+        parseInt(result[1], 16),
+        parseInt(result[2], 16),
+        parseInt(result[3], 16),
+      ]
     : null;
 }
 
@@ -354,15 +354,15 @@ function compute() {
 
   realPixel.style.backgroundColor = rgbColor;
   realPixelTextRGB.innerText = rgbColor;
-  realPixelTextRGB.setAttribute('data-clipboard-text', rgbColor);
+  realPixelTextRGB.parentElement.setAttribute("data-clipboard-text", rgbColor);
   realPixelTextHEX.innerText = hexColor;
-  realPixelTextHEX.setAttribute('data-clipboard-text', hexColor);
+  realPixelTextHEX.parentElement.setAttribute("data-clipboard-text", hexColor);
 
   filterPixel.style.filter = String(res.result.filterRaw);
   filterPixel.style.webkitFilter = String(res.result.filterRaw);
 
   filterPixelText.innerText = res.result.filter;
-  filterPixelText.setAttribute('data-clipboard-text', res.result.filter);
+  filterPixelText.parentElement.setAttribute("data-clipboard-text", res.result.filter);
 
   lossDetail.innerHTML = `Loss: ${res.result.loss.toFixed(1)}. <b>${res.lossMsg}</b>`;
 }
@@ -383,7 +383,7 @@ function onStart() {
   const copyableElements = document.querySelectorAll('.copyable');
   const copyEl = document.querySelectorAll('.pos');
 
-  new ClipboardJS('code');
+  new ClipboardJS("span.copyable");
 
   copyableElements.forEach((el, index) => {
     el.addEventListener('click', () => {
