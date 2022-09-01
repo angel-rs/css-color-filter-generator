@@ -17,11 +17,16 @@ function hexToRgb(hex) {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
     ? [
-        parseInt(result[1], 16),
-        parseInt(result[2], 16),
-        parseInt(result[3], 16),
-      ]
+      parseInt(result[1], 16),
+      parseInt(result[2], 16),
+      parseInt(result[3], 16),
+    ]
     : null;
+}
+
+function trimRgb(rgb) {
+  const [r, g, b] = rgb.replace(/rgb\(|\) /i, '').split(',').map((x) => parseInt(x));
+  return [r, g, b];
 }
 
 class Color {
@@ -315,7 +320,16 @@ class Solver {
 
 function compute() {
   const input = document.getElementById('color-input').value;
-  const rgb = hexToRgb(input);
+  let rgb;
+
+  if (isHEXValid(input)) {
+    rgb = hexToRgb(input);
+  } else if (isRGBValid(input)) {
+    rgb = trimRgb(input);
+  } else {
+    alert('Invalid format!');
+    return;
+  }
 
   if (rgb.length !== 3) {
     alert('Invalid format!');
@@ -323,7 +337,7 @@ function compute() {
   }
 
   const color = new Color(rgb[0], rgb[1], rgb[2]);
-  const solver =  new Solver(color);
+  const solver = new Solver(color);
   const result = solver.solve();
   let lossMsg = '';
   const res = {
@@ -367,12 +381,42 @@ function compute() {
   lossDetail.innerHTML = `Loss: ${res.result.loss.toFixed(1)}. <b>${res.lossMsg}</b>`;
 }
 
-function validateColor(color) {
-  const submitButton = document.getElementById('action-button');
+function isHEXValid(color) {
   const HEXColorRegExp = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
   const isValid = HEXColorRegExp.test(color);
 
   if (isValid) {
+    return true;
+  } else {
+    return false;
+  };
+}
+
+function isRGBValid(color) {
+  const RGBColorRegExp = /^(rgb\()?\d{1,3}, ?\d{1,3}, ?\d{1,3}(\))?$/i;
+
+  if (!RGBColorRegExp.test(color))
+    return false;
+
+  color = color.toLowerCase();
+  const startCheck = color.startsWith('rgb');
+  const endCheck = color.endsWith(')');
+  if (startCheck && !endCheck || !startCheck && endCheck)
+    return false;
+
+  const [r, g, b] = color.replace(/^rgb\(|\)| /, '').split(',').map((x) => parseInt(x));
+  console.log(r, g, b);
+  if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function validateColor(color) {
+  const submitButton = document.getElementById('action-button');
+
+  if (isHEXValid(color) || isRGBValid(color)) {
     submitButton.classList.remove('disabled');
   } else if (!submitButton.classList.contains('disabled')) {
     submitButton.classList.add('disabled');
@@ -395,7 +439,7 @@ function onStart() {
     });
   });
 
-  document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('color-input').removeAttribute('disabled');
   });
 }
