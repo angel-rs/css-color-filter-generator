@@ -11,15 +11,20 @@ function rgbToHex(r, g, b) {
 
   return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 }
-
-function hexToRgb(hex) {
+// Added a modify about this functions works to separate what they do
+// this one just expand #f00 to #ff0000
+function hexexpand(hextexp) {
   // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
   const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-  hex = hex.replace(shorthandRegex, (m, r, g, b) => {
+  hextexp = hextexp.replace(shorthandRegex, (m, r, g, b) => {
     return r + r + g + g + b + b;
   });
- 
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return hextexp;
+}
+// and this other converts long hex to rgb
+function hexToRgb(hex) {
+  const expandedHex = hexexpand(hex);
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(expandedHex);
   return result
     ? [
         parseInt(result[1], 16),
@@ -429,14 +434,26 @@ function onStart() {
 }
 
 // Colorpicker modification
+
 colorRadio.addEventListener("change", () => {
   inputprovitional.value = colorRadio.value;
   validateColor(inputprovitional.value);
 });
 inputprovitional.addEventListener("input", () => {
   validateColor(inputprovitional.value);
+  const inputlength = inputprovitional.value.length;
 
-  colorRadio.value = inputprovitional.value;
+  switch (inputlength) {
+    case 4:
+      colorRadio.value = "#" + hexexpand(inputprovitional.value);
+      break;
+    case 7:
+      colorRadio.value = inputprovitional.value;
+      break;
+    default:
+      colorRadio.value = "#000000";
+      break;
+  }
 });
 
 onStart();
