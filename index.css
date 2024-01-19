@@ -54,6 +54,10 @@ code:hover {
   cursor: pointer;
 }
 
+#color-input {
+  width: 250px;
+}
+
 #color-input:disabled + label {
   background-color: #ececec;
 }
