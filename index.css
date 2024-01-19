@@ -16,7 +16,7 @@ label {
   color: gray;
   padding: 0 0.3rem;
   margin: 0 0.5rem;
-  transition: .1s ease-out;
+  transition: 0.1s ease-out;
   transform-origin: left top;
   pointer-events: none;
 }
@@ -31,6 +31,15 @@ input {
   transition: 0.1s ease-out;
 }
 
+/* Adding color whel  */
+.colorwhel__input {
+  display: block;
+  width: 5em;
+  height: 3.25em;
+  margin-left: 1em;
+  padding: 0.5em;
+}
+
 input:focus {
   border-color: #155799;
 }
@@ -38,12 +47,12 @@ input:focus {
 input:focus + label {
   color: #155799;
   top: 0;
-  transform: translateY(-50%) scale(.9);
+  transform: translateY(-50%) scale(0.9);
 }
 
 input:not(:placeholder-shown) + label {
   top: 0;
-  transform: translateY(-50%) scale(.9);
+  transform: translateY(-50%) scale(0.9);
 }
 
 section[class*="section"] {
@@ -74,35 +83,38 @@ code:hover {
 }
 
 .btn3d {
-	position: relative;
-	top: -6px;
-	border: 0;
-	transition: all 40ms linear;
-	margin-top: 10px;
-	margin-bottom: 10px;
-	margin-left: 2px;
-	margin-right: 2px;
+  position: relative;
+  top: -6px;
+  border: 0;
+  transition: all 40ms linear;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 2px;
+  margin-right: 2px;
 }
 
 .btn3d:active:focus,
 .btn3d:focus:hover,
 .btn3d:focus {
-	-moz-outline-style: none;
-	outline: medium none;
+  -moz-outline-style: none;
+  outline: medium none;
 }
 
 .btn3d:active,
 .btn3d.active {
-	top: 2px;
+  top: 2px;
 }
 
 .btn3d.btn-default {
-	box-shadow: 0 0 0 1px transparent inset, 0 0 0 2px rgba(255, 255, 255, 0.10) inset, 0 8px 0 0 #BEBEBE, 0 8px 8px 1px rgba(0, 0, 0, .2);
+  box-shadow: 0 0 0 1px transparent inset,
+    0 0 0 2px rgba(255, 255, 255, 0.1) inset, 0 8px 0 0 #bebebe,
+    0 8px 8px 1px rgba(0, 0, 0, 0.2);
 }
 
 .btn3d.btn-default:active,
 .btn3d.btn-default.active {
-	box-shadow: 0 0 0 1px transparent inset, 0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 1px 3px 1px rgba(0, 0, 0, .1);
+  box-shadow: 0 0 0 1px transparent inset,
+    0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 1px 3px 1px rgba(0, 0, 0, 0.1);
 }
 
 .copyable .pos {
@@ -131,10 +143,15 @@ code:hover {
 
 .action-button:after {
   position: absolute;
-  content:'';
+  content: "";
   display: inline-block;
-  background: rgba(59,173,227,1);
-  background: linear-gradient(45deg, rgba(59,173,227,1) 0%, #155799 45%, #159957 100%);
+  background: rgba(59, 173, 227, 1);
+  background: linear-gradient(
+    45deg,
+    rgba(59, 173, 227, 1) 0%,
+    #155799 45%,
+    #159957 100%
+  );
   height: 50px;
   width: 372px;
   z-index: -1;
@@ -160,9 +177,9 @@ code:hover {
   color: #159957;
   font-size: 15px;
   -webkit-transition: opacity 0.35s ease-in-out;
-     -moz-transition: opacity 0.35s ease-in-out;
-       -o-transition: opacity 0.35s ease-in-out;
-          transition: opacity 0.35s ease-in-out;
+  -moz-transition: opacity 0.35s ease-in-out;
+  -o-transition: opacity 0.35s ease-in-out;
+  transition: opacity 0.35s ease-in-out;
 }
 
 .copy:hover {
@@ -198,7 +215,8 @@ code:hover {
   align-items: center;
 }
 
-.real-section, .filtered-section {
+.real-section,
+.filtered-section {
   min-height: 150px;
 }
 

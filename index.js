@@ -1,3 +1,8 @@
+// KDR ColorRadio const
+let colorRadio = document.getElementById("color-radio");
+// Sorry for create a new var xD
+let inputprovitional = document.getElementById("color-input");
+
 function rgbToHex(r, g, b) {
   function componentToHex(c) {
     var hex = c.toString(16);
@@ -13,7 +18,7 @@ function hexToRgb(hex) {
   hex = hex.replace(shorthandRegex, (m, r, g, b) => {
     return r + r + g + g + b + b;
   });
-
+ 
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
     ? [
@@ -30,7 +35,9 @@ class Color {
   }
 
   toRgb() {
-    return `rgb(${Math.round(this.r)}, ${Math.round(this.g)}, ${Math.round(this.b)})`;
+    return `rgb(${Math.round(this.r)}, ${Math.round(this.g)}, ${Math.round(
+      this.b
+    )})`;
   }
 
   toHex() {
@@ -44,7 +51,7 @@ class Color {
   }
 
   hueRotate(angle = 0) {
-    angle = angle / 180 * Math.PI;
+    angle = (angle / 180) * Math.PI;
     const sin = Math.sin(angle);
     const cos = Math.cos(angle);
 
@@ -53,7 +60,7 @@ class Color {
       0.715 - cos * 0.715 - sin * 0.715,
       0.072 - cos * 0.072 + sin * 0.928,
       0.213 - cos * 0.213 + sin * 0.143,
-      0.715 + cos * 0.285 + sin * 0.140,
+      0.715 + cos * 0.285 + sin * 0.14,
       0.072 - cos * 0.072 - sin * 0.283,
       0.213 - cos * 0.213 - sin * 0.787,
       0.715 - cos * 0.715 + sin * 0.715,
@@ -104,9 +111,15 @@ class Color {
   }
 
   multiply(matrix) {
-    const newR = this.clamp(this.r * matrix[0] + this.g * matrix[1] + this.b * matrix[2]);
-    const newG = this.clamp(this.r * matrix[3] + this.g * matrix[4] + this.b * matrix[5]);
-    const newB = this.clamp(this.r * matrix[6] + this.g * matrix[7] + this.b * matrix[8]);
+    const newR = this.clamp(
+      this.r * matrix[0] + this.g * matrix[1] + this.b * matrix[2]
+    );
+    const newG = this.clamp(
+      this.r * matrix[3] + this.g * matrix[4] + this.b * matrix[5]
+    );
+    const newB = this.clamp(
+      this.r * matrix[6] + this.g * matrix[7] + this.b * matrix[8]
+    );
     this.r = newR;
     this.g = newG;
     this.b = newB;
@@ -126,9 +139,9 @@ class Color {
   }
 
   invert(value = 1) {
-    this.r = this.clamp((value + this.r / 255 * (1 - 2 * value)) * 255);
-    this.g = this.clamp((value + this.g / 255 * (1 - 2 * value)) * 255);
-    this.b = this.clamp((value + this.b / 255 * (1 - 2 * value)) * 255);
+    this.r = this.clamp((value + (this.r / 255) * (1 - 2 * value)) * 255);
+    this.g = this.clamp((value + (this.g / 255) * (1 - 2 * value)) * 255);
+    this.b = this.clamp((value + (this.b / 255) * (1 - 2 * value)) * 255);
   }
 
   hsl() {
@@ -138,7 +151,9 @@ class Color {
     const b = this.b / 255;
     const max = Math.max(r, g, b);
     const min = Math.min(r, g, b);
-    let h, s, l = (max + min) / 2;
+    let h,
+      s,
+      l = (max + min) / 2;
 
     if (max === min) {
       h = s = 0;
@@ -239,7 +254,7 @@ class Solver {
 
       const lossDiff = this.loss(highArgs) - this.loss(lowArgs);
       for (let i = 0; i < 6; i++) {
-        const g = lossDiff / (2 * ck) * deltas[i];
+        const g = (lossDiff / (2 * ck)) * deltas[i];
         const ak = a[i] / Math.pow(A + k + 1, alpha);
         values[i] = fix(values[i] - ak * g, i);
       }
@@ -264,7 +279,7 @@ class Solver {
         if (value > max) {
           value %= max;
         } else if (value < 0) {
-          value = max + value % max;
+          value = max + (value % max);
         }
       } else if (value < 0) {
         value = 0;
@@ -302,30 +317,38 @@ class Solver {
     function fmt(idx, multiplier = 1) {
       return Math.round(filters[idx] * multiplier);
     }
-    return `brightness(0) saturate(100%) invert(${fmt(0)}%) sepia(${fmt(1)}%) saturate(${fmt(2)}%) hue-rotate(${fmt(3, 3.6)}deg) brightness(${fmt(4)}%) contrast(${fmt(5)}%)`;
+    return `brightness(0) saturate(100%) invert(${fmt(0)}%) sepia(${fmt(
+      1
+    )}%) saturate(${fmt(2)}%) hue-rotate(${fmt(3, 3.6)}deg) brightness(${fmt(
+      4
+    )}%) contrast(${fmt(5)}%)`;
   }
 
   css(filters) {
     function fmt(idx, multiplier = 1) {
       return Math.round(filters[idx] * multiplier);
     }
-    return `filter: brightness(0) saturate(100%) invert(${fmt(0)}%) sepia(${fmt(1)}%) saturate(${fmt(2)}%) hue-rotate(${fmt(3, 3.6)}deg) brightness(${fmt(4)}%) contrast(${fmt(5)}%);`;
+    return `filter: brightness(0) saturate(100%) invert(${fmt(0)}%) sepia(${fmt(
+      1
+    )}%) saturate(${fmt(2)}%) hue-rotate(${fmt(3, 3.6)}deg) brightness(${fmt(
+      4
+    )}%) contrast(${fmt(5)}%);`;
   }
 }
 
 function compute() {
-  const input = document.getElementById('color-input').value;
+  const input = document.getElementById("color-input").value;
   const rgb = hexToRgb(input);
 
   if (rgb.length !== 3) {
-    alert('Invalid format!');
+    alert("Invalid format!");
     return;
   }
 
   const color = new Color(rgb[0], rgb[1], rgb[2]);
-  const solver =  new Solver(color);
+  const solver = new Solver(color);
   const result = solver.solve();
-  let lossMsg = '';
+  let lossMsg = "";
   const res = {
     color,
     solver,
@@ -334,21 +357,21 @@ function compute() {
   };
 
   if (res.result.loss < 1) {
-    res.lossMsg = 'This is a perfect result.';
+    res.lossMsg = "This is a perfect result.";
   } else if (res.result.loss < 5) {
-    res.lossMsg = 'The is close enough.';
+    res.lossMsg = "The is close enough.";
   } else if (res.result.loss < 15) {
-    res.lossMsg = 'The color is somewhat off. Consider running it again.';
+    res.lossMsg = "The color is somewhat off. Consider running it again.";
   } else {
-    res.lossMsg = 'The color is extremely off. Run it again!';
+    res.lossMsg = "The color is extremely off. Run it again!";
   }
 
-  const filterPixel = document.getElementById('filterPixel');
-  const filterPixelText = document.getElementById('filterPixelText');
-  const lossDetail = document.getElementById('lossDetail');
-  const realPixel = document.getElementById('realPixel');
-  const realPixelTextRGB = document.getElementById('realPixelTextRGB');
-  const realPixelTextHEX = document.getElementById('realPixelTextHEX');
+  const filterPixel = document.getElementById("filterPixel");
+  const filterPixelText = document.getElementById("filterPixelText");
+  const lossDetail = document.getElementById("lossDetail");
+  const realPixel = document.getElementById("realPixel");
+  const realPixelTextRGB = document.getElementById("realPixelTextRGB");
+  const realPixelTextHEX = document.getElementById("realPixelTextHEX");
   const rgbColor = res.color.toRgb();
   const hexColor = res.color.toHex();
 
@@ -362,42 +385,58 @@ function compute() {
   filterPixel.style.webkitFilter = String(res.result.filterRaw);
 
   filterPixelText.innerText = res.result.filter;
-  filterPixelText.parentElement.setAttribute("data-clipboard-text", res.result.filter);
+  filterPixelText.parentElement.setAttribute(
+    "data-clipboard-text",
+    res.result.filter
+  );
 
-  lossDetail.innerHTML = `Loss: ${res.result.loss.toFixed(1)}. <b>${res.lossMsg}</b>`;
+  lossDetail.innerHTML = `Loss: ${res.result.loss.toFixed(1)}. <b>${
+    res.lossMsg
+  }</b>`;
 }
 
 function validateColor(color) {
-  const submitButton = document.getElementById('action-button');
+  const submitButton = document.getElementById("action-button");
   const HEXColorRegExp = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
   const isValid = HEXColorRegExp.test(color);
 
   if (isValid) {
-    submitButton.classList.remove('disabled');
-  } else if (!submitButton.classList.contains('disabled')) {
-    submitButton.classList.add('disabled');
+    submitButton.classList.remove("disabled");
+  } else if (!submitButton.classList.contains("disabled")) {
+    submitButton.classList.add("disabled");
   }
 }
 
 function onStart() {
-  const copyableElements = document.querySelectorAll('.copyable');
-  const copyEl = document.querySelectorAll('.pos');
+  const copyableElements = document.querySelectorAll(".copyable");
+  const copyEl = document.querySelectorAll(".pos");
 
   new ClipboardJS("span.copyable");
 
   copyableElements.forEach((el, index) => {
-    el.addEventListener('click', () => {
-      copyEl[index].classList.add('copied');
+    el.addEventListener("click", () => {
+      copyEl[index].classList.add("copied");
 
       setTimeout(() => {
-        copyEl[index].classList.remove('copied');
+        copyEl[index].classList.remove("copied");
       }, 1500);
     });
   });
 
-  document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById('color-input').removeAttribute('disabled');
+  document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("color-input").removeAttribute("disabled");
   });
 }
+
+// Colorpicker modification
+colorRadio.addEventListener("change", () => {
+  inputprovitional.value = colorRadio.value;
+  validateColor(inputprovitional.value);
+});
+inputprovitional.addEventListener("input", () => {
+  validateColor(inputprovitional.value);
+
+  colorRadio.value = inputprovitional.value;
+});
 
 onStart();
