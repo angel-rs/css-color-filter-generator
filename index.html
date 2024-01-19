@@ -1,83 +1,115 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
- 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
- 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
-		<link rel="stylesheet" href="normalize.css">
-		<link rel="stylesheet" href="cayman.css">
-		<link rel="stylesheet" href="index.css">
-		<title>CSS Color Filter Generator</title>
-	</head>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet" />
+    <link rel="stylesheet" href="normalize.css" />
+    <link rel="stylesheet" href="cayman.css" />
+    <link rel="stylesheet" href="index.css" />
+    <title>CSS Color Filter Generator</title>
+  </head>
   <body>
     <section class="page-header">
       <h1 class="project-name">css-color-filter-generator</h1>
       <h2 class="project-tagline"></h2>
-      <a href="https://github.com/angel-rs/css-color-filter-generator" class="btn">View on GitHub</a>
+      <a
+        href="https://github.com/angel-rs/css-color-filter-generator"
+        class="btn"
+        >View on GitHub</a
+      >
     </section>
 
     <section class="main-content">
       <div>
-				<section class="input-section">
-					<div class="material-textfield">
-			      <input disabled id="color-input" class="target" type="text" placeholder="#000" type="text" maxlength="18" oninput="validateColor(this.value)">
-			      <label>Desired Hex or RGB Color</label>
-			    </div>
-	        <a id="action-button" class="btn3d btn-default action-button disabled" onclick="compute()"><span>Get Filter!</span></a>
-				</section>
+        <section class="input-section">
+          <div class="material-textfield">
+            <input
+              disabled
+              id="color-input"
+              class="target"
+              type="text"
+              placeholder="#000"
+              type="text"
+              maxlength="18"
+              oninput="validateColor(this.value)"
+            />
+            <label>Desired Hex or RGB Color</label>
+          </div>
+          <a
+            id="action-button"
+            class="btn3d btn-default action-button disabled"
+            onclick="compute()"
+            ><span>Get Filter!</span></a
+          >
+        </section>
 
-				<section class="real-section">
-	        <p>Real pixel:</p>
+        <section class="real-section">
+          <p>Real pixel:</p>
 
-					<div class="color-wrapper">
-						<div id="realPixel" class="pixel"></div>
+          <div class="color-wrapper">
+            <div id="realPixel" class="pixel"></div>
 
-						<div class="color-content">
-							<span class="copyable" data-clipboard-text="rgb(0, 0, 0)">
-								<b>RGB </b><code id="realPixelTextRGB">rgb(0, 0, 0)</code>
-								<span class="copy">Copy</span>
-								<span class="pos"></span>
-							</span>
-							<br>
-							<span class="copyable" data-clipboard-text="#000">
-								<b>HEX </b><code id="realPixelTextHEX">#000</code>
-								<span class="copy">Copy</span>
-								<span class="pos"> </span>
-							</span>
-						</div>
-					</div>
-				</section>
+            <div class="color-content">
+              <span class="copyable" data-clipboard-text="rgb(0, 0, 0)">
+                <b>RGB </b><code id="realPixelTextRGB">rgb(0, 0, 0)</code>
+                <span class="copy">Copy</span>
+                <span class="pos"></span>
+              </span>
+              <br />
+              <span class="copyable" data-clipboard-text="#000">
+                <b>HEX </b><code id="realPixelTextHEX">#000</code>
+                <span class="copy">Copy</span>
+                <span class="pos"> </span>
+              </span>
+            </div>
+          </div>
+        </section>
 
-				<section class="filtered-section">
-	        <p>Filtered pixel, style applied through CSS</p>
+        <section class="filtered-section">
+          <p>Filtered pixel, style applied through CSS</p>
 
-					<div class="color-wrapper">
-						<div id="filterPixel" class="pixel"></div>
+          <div class="color-wrapper">
+            <div id="filterPixel" class="pixel"></div>
 
-						<div class="color-content">
-							<span class="copyable" data-clipboard-text="filter: brightness(0) saturate(100%)">
-								<code id="filterPixelText">filter: brightness(0) saturate(100%)</code>
-								<span class="copy">Copy</span>
-								<span class="pos"></span>
-							</span>
-						</div>
-					</div>
-				</section>
+            <div class="color-content">
+              <span
+                class="copyable"
+                data-clipboard-text="filter: brightness(0) saturate(100%)"
+              >
+                <code id="filterPixelText"
+                  >filter: brightness(0) saturate(100%)</code
+                >
+                <span class="copy">Copy</span>
+                <span class="pos"></span>
+              </span>
+            </div>
+          </div>
+        </section>
 
-        <span id="lossDetail">
-        	Loss: 0
-        </span>
+        <span id="lossDetail"> Loss: 0 </span>
       </div>
 
-			<footer class="site-footer">
-				<span class="site-footer-owner"><a href="https://github.com/angel-rs/css-color-filter-generator">css-color-filter-generator</a> is maintained by <a href="https://github.com/angel-rs">angel-rs</a>.</span>
-				<span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
-				<span class="site-footer-note">Made with <i class="em em-coffee"></i>  and  <i class="em em-heart"></i></span>
-			</footer>
+      <footer class="site-footer">
+        <span class="site-footer-owner"
+          ><a href="https://github.com/angel-rs/css-color-filter-generator"
+            >css-color-filter-generator</a
+          >
+          is maintained by
+          <a href="https://github.com/angel-rs">angel-rs</a>.</span
+        >
+        <span class="site-footer-credits"
+          >This page was generated by
+          <a href="https://pages.github.com">GitHub Pages</a>.</span
+        >
+        <span class="site-footer-note"
+          >Made with <i class="em em-coffee"></i> and <i class="em em-heart"></i
+        ></span>
+      </footer>
     </section>
 
-		<script src="https://unpkg.com/clipboard@2/dist/clipboard.min.js"></script>
+    <script src="https://unpkg.com/clipboard@2/dist/clipboard.min.js"></script>
     <script src="index.js"></script>
   </body>
 </html>
