@@ -54,6 +54,20 @@ code:hover {
   cursor: pointer;
 }
 
+.colorwheel__input {
+  display: block;
+  width: 5em;
+  height: 3.25em;
+  margin-left: 1em;
+  padding: 0.5em;
+  background-color: transparent;
+  transition: outline 0.5 ease-in-out;
+}
+
+.colorwheel__input:hover {
+  outline: 1px solid #155799;
+}
+
 #color-input {
   width: 250px;
 }

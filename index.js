@@ -1,3 +1,36 @@
+const colorRadio = document.getElementById("color-radio");
+const colorInput = document.getElementById("color-input");
+
+colorRadio.addEventListener("change", () => {
+  colorInput.value = colorRadio.value;
+  validateColor(colorInput.value);
+});
+
+colorInput.addEventListener("input", () => {
+  validateColor(colorInput.value);
+
+  switch (colorInput.value.length) {
+    case 4:
+      colorRadio.value = "#" + hexexpand(colorInput.value);
+      break;
+    case 7:
+      colorRadio.value = colorInput.value;
+      break;
+    default:
+      colorRadio.value = "#000000";
+      break;
+  }
+});
+
+// Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+function expandHex(hextexp) {
+  const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+  hextexp = hextexp.replace(shorthandRegex, (m, r, g, b) => {
+    return r + r + g + g + b + b;
+  });
+  return hextexp;
+}
+
 function rgbToHex(r, g, b) {
   function componentToHex(c) {
     var hex = c.toString(16);
@@ -8,13 +41,8 @@ function rgbToHex(r, g, b) {
 }
 
 function hexToRgb(hex) {
-  // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
-  const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-  hex = hex.replace(shorthandRegex, (m, r, g, b) => {
-    return r + r + g + g + b + b;
-  });
-
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  const expandedHex = expandHex(hex);
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(expandedHex);
   return result
     ? [
         parseInt(result[1], 16),
