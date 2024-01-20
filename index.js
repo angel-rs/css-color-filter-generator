@@ -479,6 +479,20 @@ function validateColor(color) {
 }
 
 function onStart() {
+  const initialColor = new URLSearchParams(document.location.search).get(
+    "color"
+  );
+  if (initialColor && isHEXValid(`#${initialColor}`)) {
+    document
+      .getElementById("color-input")
+      .setAttribute("value", `#${initialColor}`);
+    document
+      .getElementById("color-radio")
+      .setAttribute("value", `#${initialColor}`);
+    validateColor(`#${initialColor}`);
+    compute();
+  }
+
   const copyableElements = document.querySelectorAll(".copyable");
   const copyEl = document.querySelectorAll(".pos");
 
