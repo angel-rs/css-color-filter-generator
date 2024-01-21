@@ -78,9 +78,11 @@ code:hover {
 
 .disabled {
   background-color: #ececec !important;
+  border: solid 1px #ececec !important;
   color: #999999 !important;
   pointer-events: none;
   cursor: default;
+  
 }
 
 .disabled:after {
@@ -134,8 +136,9 @@ code:hover {
 .action-button {
   border-radius: 10px;
   display: block;
-  height: 50px;
+  height: fit-content;
   width: 186px;
+  min-width: fit-content;
   position: relative;
   overflow: hidden;
   text-decoration: none;
@@ -145,6 +148,8 @@ code:hover {
   text-align: center;
   font-weight: bold;
   margin-left: 30px;
+
+  padding: .6rem 1rem;
 }
 
 .action-button:after {
@@ -153,7 +158,8 @@ code:hover {
   display: inline-block;
   background: rgba(59,173,227,1);
   background: linear-gradient(45deg, rgba(59,173,227,1) 0%, #155799 45%, #159957 100%);
-  height: 50px;
+  height: 100%;
+  top: 0;
   width: 372px;
   z-index: -1;
   transform: translateX(-280px);
@@ -171,7 +177,6 @@ code:hover {
 
 .action-button span {
   position: relative;
-  top: 13px;
 }
 
 .copy {
@@ -212,7 +217,7 @@ code:hover {
 .input-section {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 }
 
@@ -249,4 +254,83 @@ code:hover {
     opacity: 0;
     transform: translateY(-15px);
   }
+}
+
+/*Iteration slider*/
+
+.iterationSliderWrap{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  margin-left: 2rem;
+}
+
+.iterationSliderWrap p{
+  height: fit-content;
+  margin: 0;
+}
+
+.iterationSliderWrap p span::after{
+  content: var(--_counter);
+  color: #0c0c0c;
+  font-weight: bold;
+}
+
+.iterationSliderWrap ::selection{
+  background: transparent;
+}
+
+input[type=range] {
+  position: relative;
+  outline: 0;
+  border: 0;
+  border-radius: .5rem;
+  width: 22rem;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+
+  overflow: hidden;
+  height: 2rem;
+  -webkit-appearance: none;
+  /* background: linear-gradient(90deg, #15945b, #155c93); */
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  height: .8rem;
+  -webkit-appearance: none;
+  color: #e9e9e9;
+  background: linear-gradient(90deg, #15945b, #155c93 var(--_progress), #ddd var(--_progress));
+  border-radius: .5rem;
+
+}
+input[type=range]::-webkit-slider-thumb {
+  width: .8rem;
+  -webkit-appearance: none;
+  height: 1.6rem;
+  cursor: ew-resize;
+  background: #1d1d1d;
+  /* box-shadow: 32rem 0 0 31.5rem #ddd; */
+  border-radius: .5rem;
+  position: relative;
+
+  translate: 0 -25%;
+}
+
+input[type=range]:active::-webkit-slider-thumb {
+  background: #1c2227;
+}
+
+input[type=range]::-moz-range-progress {
+  background-color: #43e5f7;
+}
+input[type=range]::-moz-range-track {
+  background-color: #9a905d;
+}
+input[type=range]::-ms-fill-lower {
+  background-color: #43e5f7;
+}
+input[type=range]::-ms-fill-upper {
+  background-color: #9a905d;
 }

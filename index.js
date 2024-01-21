@@ -1,3 +1,9 @@
+const getFilterBtn = document.getElementById('action-button');
+getFilterBtn.addEventListener('click', async (e)=>{
+  e.preventDefault();
+  compute();
+});
+
 const colorRadio = document.getElementById("color-radio");
 const colorInput = document.getElementById("color-input");
 
@@ -21,6 +27,31 @@ colorInput.addEventListener("input", () => {
       break;
   }
 });
+
+const slider = {
+  input:  document.getElementById("iterationsSlider"),
+  counter:  document.getElementById("iterationsCounter"),
+  min: 1,
+  max: 100,
+};
+
+resetSliderRange = () => {
+  slider.input.setAttribute("min",slider.min);
+  slider.input.setAttribute("max",slider.max);
+}
+updateSliderUI = () => {
+  let val = slider.input.value;
+  slider.counter.style.setProperty('--_counter', `'${val}'`);
+  val = ((val-slider.min)/(slider.max-slider.min))*100;
+  slider.input.style.setProperty('--_progress', `${val.toFixed(1)}%`);
+}
+
+slider.input.value = 10;
+resetSliderRange();
+updateSliderUI();
+
+slider.input.addEventListener('change',resetSliderRange);
+slider.input.addEventListener('input', updateSliderUI);
 
 // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
 function expandHex(hextexp) {
@@ -367,7 +398,7 @@ class Solver {
   }
 }
 
-function compute() {
+async function compute() {
   const input = document.getElementById("color-input").value;
   let rgb;
 
@@ -387,7 +418,20 @@ function compute() {
 
   const color = new Color(rgb[0], rgb[1], rgb[2]);
   const solver = new Solver(color);
-  const result = solver.solve();
+  
+  let resArr = [];
+  let iterations = slider.input.value;
+  for(let i=0; i<iterations; ++i){
+    resArr.push(solver.solve());
+  }
+  let bestRes = resArr[0];
+  for(let i=1; i<iterations; ++i){
+    if(bestRes.loss > resArr[i].loss){
+      bestRes = resArr[i];
+    }
+  }
+  const result = bestRes;
+
   let lossMsg = "";
   const res = {
     color,
@@ -430,7 +474,7 @@ function compute() {
     res.result.filter
   );
 
-  lossDetail.innerHTML = `Loss: ${res.result.loss.toFixed(1)}. <b>${
+  lossDetail.innerHTML = `Loss: ${res.result.loss.toFixed(1)}  | <b>${
     res.lossMsg
   }</b>`;
 }
