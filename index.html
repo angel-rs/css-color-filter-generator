@@ -43,9 +43,12 @@
           <a
             id="action-button"
             class="btn3d btn-default action-button disabled"
-            onclick="compute()"
             ><span>Get Filter!</span></a
           >
+          <div class="iterationSliderWrap">
+            <p>Iterations: <span id="iterationsCounter"></span></p>
+            <input id="iterationsSlider" type="range">
+          </div>
         </section>
 
         <section class="real-section">
@@ -112,7 +115,7 @@
       </footer>
     </section>
 
-    <script src="https://unpkg.com/clipboard@2/dist/clipboard.min.js"></script>
+    <script src="clipboard.min.js"></script>
     <script src="index.js"></script>
   </body>
 </html>
