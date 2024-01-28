@@ -386,15 +386,26 @@ function compute() {
   }
 
   const color = new Color(rgb[0], rgb[1], rgb[2]);
-  const solver = new Solver(color);
-  const result = solver.solve();
+  let solver = new Solver(color);
+  let result = solver.solve();
   let lossMsg = "";
-  const res = {
+  let res = {
     color,
     solver,
     result,
     lossMsg,
   };
+
+  while (res.result.loss >= 5) {
+    solver = new Solver(color);
+    result = solver.solve();
+    res = {
+      color,
+      solver,
+      result,
+      lossMsg,
+    };
+  }
 
   if (res.result.loss < 1) {
     res.lossMsg = "This is a perfect result.";
@@ -405,6 +416,7 @@ function compute() {
   } else {
     res.lossMsg = "The color is extremely off. Run it again!";
   }
+
 
   const filterPixel = document.getElementById("filterPixel");
   const filterPixelText = document.getElementById("filterPixelText");
