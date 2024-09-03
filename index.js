@@ -399,7 +399,7 @@ function compute() {
   if (res.result.loss < 1) {
     res.lossMsg = "This is a perfect result.";
   } else if (res.result.loss < 5) {
-    res.lossMsg = "The is close enough.";
+    res.lossMsg = "This is close enough.";
   } else if (res.result.loss < 15) {
     res.lossMsg = "The color is somewhat off. Consider running it again.";
   } else {
