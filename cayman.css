@@ -534,3 +534,30 @@
  .site-footer-credits {
 	 color: #819198;
 }
+ @media screen and (max-width: 42em) {
+	 .input-section {
+		 flex-direction: column !important;
+		 gap: 0.5rem;
+	}
+	 .material-textfield {
+		 width: 100%;
+	}
+	 #color-input {
+		 width: 100% !important;
+	}
+	 .colorwheel {
+		 width: 100%;
+	}
+	 #color-radio {
+		 width: 100%;
+		 margin-left: initial;
+	}
+	 .action-button {
+		 width: 100% !important;
+		 margin-left: initial !important;
+	}
+	 .action-button:after {
+		 width: calc(100% + 1px) !important;
+		 transform: translateX(calc(-50% - 48px)) !important;
+	}
+}
